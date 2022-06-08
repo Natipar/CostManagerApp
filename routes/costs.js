@@ -107,6 +107,7 @@ router.get('/getReport', async function (req, res) {
                 }
             }
             , async function(err , obj){
+            //TODO: Null Check for returned obj
                 const detailsMap = new Map();
                 for (let i = 0; i < arr.length; i++) {
                     detailsMap.set(arr[i].description, arr[i].cost);
@@ -117,6 +118,8 @@ router.get('/getReport', async function (req, res) {
     });
 });
 
+
+//TODO: Update function delete to also reduce the price of the deleted cost from the total_cost
 //delete from db
 router.delete('/:deleteCost', async (req, res) => {
     const removeCost = await user.remove({_id: req.params.deleteCost});
