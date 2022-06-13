@@ -59,9 +59,9 @@ router.post('/addCost', async (req, res) => {
                 })
             } else {
                 try {
-/*                    const filterred = await obj.filter(function (el) {
-                        return el.month === d.getMonth() && el.year === d.getFullYear();
-                    });*/
+                    /*                    const filterred = await obj.filter(function (el) {
+                                            return el.month === d.getMonth() && el.year === d.getFullYear();
+                                        });*/
                     //const item = filterred[0];
                     const tot = obj.totalCost + parseInt(req.body.cost);
                     obj.totalCost = tot;
@@ -106,24 +106,44 @@ router.get('/getReport', async function (req, res) {
                     $in: [req.query.year]
                 }
             }
-            , async function(err , obj){
+            /*VERS#1-ifElse*/
+            /* , async function(err , obj){
             //TODO: Null Check for returned obj
+                err = "error";
                 const detailsMap = new Map();
-                for (let i = 0; i < arr.length; i++) {
-                    detailsMap.set(arr[i].description, arr[i].cost);
+                if(obj == null){
+                    res.send(err);
                 }
-                detailsMap.set('total cost', obj.totalCost);
-                res.send(Object.fromEntries(detailsMap));
+                else {
+                    for (let i = 0; i < arr.length; i++) {
+                        detailsMap.set(arr[i].description, arr[i].cost);
+                    }
+                    detailsMap.set('total cost', obj.totalCost);
+                    res.send(Object.fromEntries(detailsMap));
+                 };*/
+            /*VERS#2-tryCatch*/
+            , async function(err , obj){
+                err = "error";
+                try {
+                    const detailsMap = new Map();
+                    for (let i = 0; i < arr.length; i++) {
+                        detailsMap.set(arr[i].description, arr[i].cost);
+                    }
+                    detailsMap.set('total cost', obj.totalCost);
+                    res.send(Object.fromEntries(detailsMap));
+                }catch (e) {
+                    res.send(err)
+                }
             });
     });
-});
-
+})
 
 //TODO: Update function delete to also reduce the price of the deleted cost from the total_cost
 //delete from db
-router.delete('/:deleteCost', async (req, res) => {
-    const removeCost = await user.remove({_id: req.params.deleteCost});
+router.delete('/deleteCost', async (req, res) => {
+    const removeCost = await cost.remove({_id: req.query._id});
     res.json(removeCost);
 })
 
 module.exports = router;
+
