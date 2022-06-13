@@ -1,9 +1,9 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var mongoose = require('mongoose');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const mongoose = require('mongoose');
 require('dotenv/config')
 //const { MongoClient, ServerApiVersion } = require('mongodb');
 
@@ -46,8 +46,7 @@ app.use(function(err, req, res, next) {
 
 
 //mongoose.connect('' , ()=> console.log("connected"));
-mongoose.connect(
-    process.env.MONGO_URL)
+mongoose.connect("mongodb+srv://natip:%4065GudhjEhzgb%40p@asyncproject.md58a.mongodb.net/test")
     .then(()=>console.log('connected'))
     .catch(e=>console.log(e));
 
