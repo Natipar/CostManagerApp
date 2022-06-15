@@ -52,7 +52,7 @@ router.post('/addCost', async (req, res) => {
                     totalCost: req.body.cost
                 });
                 TotalCosts.save().then(data => {
-                    console.log("saved = " + data)
+                    console.log('saved = ' + data)
                 })
             } else {
                 try {
@@ -68,7 +68,7 @@ router.post('/addCost', async (req, res) => {
     }
 });
 
-//get detailed report per specific month and year
+//get all costs
 router.get('/getCosts', async function (req, res) {
     cost.find({
         'mail': {
@@ -118,7 +118,9 @@ router.get('/getReport', async function (req, res) {
                 try {
                     const detailsMap = new Map();
                     for (let i = 0; i < arr.length; i++) {
-                        detailsMap.set(arr[i].description, arr[i].cost);
+                        if(arr[i].date.getMonth() == obj.month && arr[i].date.getFullYear() == obj.year){
+                            detailsMap.set(arr[i].description, arr[i].cost);
+                        }
                     }
                     detailsMap.set('total cost', obj.totalCost);
                     res.send(Object.fromEntries(detailsMap));
