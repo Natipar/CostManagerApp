@@ -5,7 +5,6 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 require('dotenv/config')
-//const { MongoClient, ServerApiVersion } = require('mongodb');
 
 var usersRouter = require('./routes/users');
 var costsRouter = require('./routes/costs');
@@ -34,7 +33,7 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -49,14 +48,5 @@ app.use(function(err, req, res, next) {
 mongoose.connect("mongodb+srv://natip:%4065GudhjEhzgb%40p@asyncproject.md58a.mongodb.net/test")
     .then(()=>console.log('connected'))
     .catch(e=>console.log(e));
-
-/*const uri = "mongodb+srv://natip:@65GudhjEhzgb@p@asyncproject.md58a.mongodb.net/?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-client.connect(err => {
-  const collection = client.db("AsyncProject").collection("AsyncDev.customers");
-  // perform actions on the collection object
-  client.close();*/
-//});
-
 
 module.exports = app;

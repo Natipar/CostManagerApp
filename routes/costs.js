@@ -1,14 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const cost = require('../models/cost.js');
-const user = require("../models/user");
 const totalCosts = require("../models/total_cost");
 
-//TODO : CHANGE categoryArray
 const categoryArray = ['food', 'health', 'housing', 'sport', 'education'];
 
-router.get('/', async function (req, res, next) {
-    //res.send('respond with a resource');
+router.get('/', async function (req, res) {
     await cost.find()
         .then(data => {
             res.json(data);
@@ -59,12 +56,7 @@ router.post('/addCost', async (req, res) => {
                 })
             } else {
                 try {
-                    /*                    const filterred = await obj.filter(function (el) {
-                                            return el.month === d.getMonth() && el.year === d.getFullYear();
-                                        });*/
-                    //const item = filterred[0];
-                    const tot = obj.totalCost + parseInt(req.body.cost);
-                    obj.totalCost = tot;
+                    obj.totalCost = obj.totalCost + parseInt(req.body.cost);
                     obj.save();
                 } catch (e) {
                     console.log(e.message)
@@ -106,9 +98,8 @@ router.get('/getReport', async function (req, res) {
                     $in: [req.query.year]
                 }
             }
-            /*VERS#1-ifElse*/
+            /*VERS#1-ifElse (Cheaper)*/
             /* , async function(err , obj){
-            //TODO: Null Check for returned obj
                 err = "error";
                 const detailsMap = new Map();
                 if(obj == null){
@@ -121,7 +112,7 @@ router.get('/getReport', async function (req, res) {
                     detailsMap.set('total cost', obj.totalCost);
                     res.send(Object.fromEntries(detailsMap));
                  };*/
-            /*VERS#2-tryCatch*/
+            /*VERS#2-tryCatch (Informative)*/
             , async function(err , obj){
                 err = "error";
                 try {
@@ -138,11 +129,28 @@ router.get('/getReport', async function (req, res) {
     });
 })
 
-//TODO: Update function delete to also reduce the price of the deleted cost from the total_cost
 //delete from db
-router.delete('/deleteCost', async (req, res) => {
-    const removeCost = await cost.remove({_id: req.query._id});
-    res.json(removeCost);
+router.delete('/deleteCost', async function(req, res) {
+        cost.findOne({_id: req.query._id}, async function(err, obj){
+            const d = new Date(obj.date);
+            totalCosts.findOne({
+                'mail': {
+                    $in: [obj.mail]
+                },
+                'month': {
+                    $in: [d.getMonth()]
+                },
+                'year': {
+                    $in: [d.getFullYear()]
+                }
+            },async function(err,obj1){
+                obj1.totalCost = obj1.totalCost - obj.cost;
+                obj1.save();
+            });
+        });
+
+        const removeCost = await cost.deleteOne({_id: req.query._id});
+        res.json(removeCost);
 })
 
 module.exports = router;
