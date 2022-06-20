@@ -15,7 +15,7 @@ router.get('/', async function (req, res, next) {
 router.post('/addUser', async (req, res) => {
     user.countDocuments({mail: req.body.mail}, function (err, count) {
         if (count > 0) {
-            res.send("user already exists");
+            res.send('user already exists');
         } else {
             const User = new user({
                 mail: req.body.mail.toLowerCase(),

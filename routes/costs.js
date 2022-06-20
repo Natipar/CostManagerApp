@@ -64,7 +64,7 @@ router.post('/addCost', async (req, res) => {
             }
         });
     } else {
-        res.send("please enter a valid description");
+        res.send('please enter a valid description');
     }
 });
 
@@ -114,7 +114,7 @@ router.get('/getReport', async function (req, res) {
                  };*/
             /*VERS#2-tryCatch (Informative)*/
             , async function(err , obj){
-                err = "error";
+                err = 'error';
                 try {
                     const detailsMap = new Map();
                     for (let i = 0; i < arr.length; i++) {

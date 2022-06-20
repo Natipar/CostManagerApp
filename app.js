@@ -45,7 +45,7 @@ app.use(function(err, req, res) {
 
 
 //mongoose.connect('' , ()=> console.log("connected"));
-mongoose.connect("mongodb+srv://natip:%4065GudhjEhzgb%40p@asyncproject.md58a.mongodb.net/test")
+mongoose.connect('mongodb+srv://natip:%4065GudhjEhzgb%40p@asyncproject.md58a.mongodb.net/test')
     .then(()=>console.log('connected'))
     .catch(e=>console.log(e));
 
